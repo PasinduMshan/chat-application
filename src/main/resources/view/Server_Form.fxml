@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="765.0" prefWidth="700.0" style="-fx-background-color: #FFFFF7;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ServerFormController">
+    <children>
+        <ScrollPane fx:id="scrollPain" layoutX="47.0" layoutY="112.0" prefHeight="516.0" prefWidth="606.0">
+            <content>
+                <VBox fx:id="vBox" prefHeight="507.0" prefWidth="596.0" />
+            </content>
+        </ScrollPane>
+        <ImageView fitHeight="87.0" fitWidth="193.0" layoutX="23.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../image/ChatAppLogo.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="lblUserName" layoutX="301.0" layoutY="40.0" text="Server">
+            <font>
+                <Font name="System Bold" size="30.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>
