@@ -48,7 +48,7 @@ public class ServerFormController implements Initializable {
             try {
                 receiveMessage("Server Starting...");
 
-                serverSocket = new ServerSocket(3001);
+                serverSocket = new ServerSocket(5000);
 
                 while (!serverSocket.isClosed()){
                     try{
