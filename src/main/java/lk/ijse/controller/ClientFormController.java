@@ -9,14 +9,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -28,6 +32,9 @@ public class ClientFormController implements Initializable {
 
     @FXML
     private Label lblUserName;
+
+    @FXML
+    private AnchorPane rootNode;
 
     @FXML
     private ScrollPane scrollPain;
@@ -95,6 +102,21 @@ public class ClientFormController implements Initializable {
 
     @FXML
     void btnCameraOnAction(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png","*.jpg","*.gif","*.bmp","*jpeg")
+        );
+        Stage stage = (Stage) rootNode.getScene().getWindow();
+
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            String sendImage = file.toURI().toString();
+            sendImageToClient(sendImage);
+        }
+    }
+
+    private void sendImageToClient(String sendImage) {
 
     }
 

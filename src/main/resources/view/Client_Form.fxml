@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="765.0" prefWidth="700.0" style="-fx-background-color: #FFFFF7;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ClientFormController">
+<AnchorPane fx:id="rootNode" prefHeight="765.0" prefWidth="700.0" style="-fx-background-color: #FFFFF7;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.ClientFormController">
    <children>
       <ScrollPane fx:id="scrollPain" layoutX="47.0" layoutY="112.0" prefHeight="516.0" prefWidth="606.0">
          <content>
