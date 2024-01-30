@@ -9,6 +9,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -73,31 +75,54 @@ public class ClientFormController implements Initializable {
     }
 
     public void receiveMessage(String message , VBox vBox) {
-        String name = message.split("-")[0];
-        String messageToServer = message.split("-")[1];
-        HBox hBox = new HBox();
-        hBox.setAlignment(Pos.CENTER_LEFT);
-        hBox.setPadding(new Insets(5,5,5,10));
+        if (message.matches(".*\\.(png|jpe?g|gif)$")) {
+            HBox hBoxName = new HBox();
+            hBoxName.setAlignment(Pos.CENTER_LEFT);
+            Text txtName = new Text(message.split("[-]")[0]);
+            TextFlow textFlow = new TextFlow(txtName);
+            hBoxName.getChildren().add(textFlow);
 
-        HBox hBoxName = new HBox();
-        hBoxName.setAlignment(Pos.CENTER_LEFT);
-        Text txtName = new Text(name);
-        TextFlow txtFlowName = new TextFlow(txtName);
-        hBoxName.getChildren().add(txtFlowName);
+            Image image = new Image(message.split("[-]")[1]);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(200);
+            imageView.setFitWidth(200);
+            HBox hBoxImage = new HBox();
+            hBoxImage.setAlignment(Pos.CENTER_LEFT);
+            hBoxImage.setPadding(new Insets(5,5,5,10));
+            hBoxImage.getChildren().add(imageView);
 
-        Text text = new Text(messageToServer);
-        TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: #abb8c3; -fx-font-weight: bold; -fx-background-radius: 20px");
-        textFlow.setPadding(new Insets(5,10,5,10));
-        text.setFill(Color.color(0,0,0));
+            Platform.runLater(()->{
+                vBox.getChildren().add(hBoxName);
+                vBox.getChildren().add(hBoxImage);
+            });
 
-        hBox.getChildren().add(textFlow);
+        } else {
 
-        Platform.runLater(()->{
-            vBox.getChildren().add(hBoxName);
-            vBox.getChildren().add(hBox);
-        });
+            String name = message.split("-")[0];
+            String messageToServer = message.split("-")[1];
+            HBox hBox = new HBox();
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            hBox.setPadding(new Insets(5, 5, 5, 10));
 
+            HBox hBoxName = new HBox();
+            hBoxName.setAlignment(Pos.CENTER_LEFT);
+            Text txtName = new Text(name);
+            TextFlow txtFlowName = new TextFlow(txtName);
+            hBoxName.getChildren().add(txtFlowName);
+
+            Text text = new Text(messageToServer);
+            TextFlow textFlow = new TextFlow(text);
+            textFlow.setStyle("-fx-background-color: #abb8c3; -fx-font-weight: bold; -fx-background-radius: 20px");
+            textFlow.setPadding(new Insets(5, 10, 5, 10));
+            text.setFill(Color.color(0, 0, 0));
+
+            hBox.getChildren().add(textFlow);
+
+            Platform.runLater(() -> {
+                vBox.getChildren().add(hBoxName);
+                vBox.getChildren().add(hBox);
+            });
+        }
     }
 
     @FXML
@@ -117,7 +142,24 @@ public class ClientFormController implements Initializable {
     }
 
     private void sendImageToClient(String sendImage) {
+        Image image = new Image(sendImage);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
 
+        HBox hBox = new HBox();
+        hBox.setPadding(new Insets(5,5,5,10));
+        hBox.getChildren().add(imageView);
+        hBox.setAlignment(Pos.CENTER_RIGHT);
+
+        vBox.getChildren().add(hBox);
+
+        try {
+            dataOutputStream.writeUTF(userName + "-" + sendImage);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
