@@ -243,4 +243,8 @@ public class ClientFormController implements Initializable {
         this.userName = name;
         lblUserName.setText(userName);
     }
+
+    public void shutdown() {
+        ServerFormController.receiveMessage(userName + " left the chat.");
+    }
 }

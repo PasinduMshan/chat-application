@@ -54,10 +54,11 @@ public class ServerFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         vBoxes = vBox;
+        receiveMessage("Server Starting...");
+
+
         new Thread(()->{
             try {
-                receiveMessage("Server Starting...");
-
                 serverSocket = new ServerSocket(5000);
 
                 while (!serverSocket.isClosed()){
@@ -75,6 +76,8 @@ public class ServerFormController implements Initializable {
                 throw new RuntimeException(e);
             }
         }).start();
+        receiveMessage("Server is Running...");
+        receiveMessage("Waiting for Users...");
     }
 
     public static void receiveMessage(String message) {
@@ -110,6 +113,7 @@ public class ServerFormController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.setResizable(false);
+            stage.setOnCloseRequest(windowEvent -> {controller.shutdown();});
             stage.show();
 
             txtUserName.clear();
