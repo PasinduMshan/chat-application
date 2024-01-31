@@ -1,5 +1,6 @@
 package lk.ijse.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import lk.ijse.emoji.EmojiPicker;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -43,6 +45,9 @@ public class ClientFormController implements Initializable {
 
     @FXML
     private JFXTextField txtMassage;
+
+    @FXML
+    private JFXButton btnEmoji;
 
     @FXML
     private VBox vBox;
@@ -164,7 +169,33 @@ public class ClientFormController implements Initializable {
 
     @FXML
     void btnEmojiOnAction(ActionEvent event) {
+        EmojiPicker emojiPicker = new EmojiPicker();
 
+        VBox vBox = new VBox(emojiPicker);
+        vBox.setPrefSize(150,300);
+        vBox.setLayoutX(30);
+        vBox.setLayoutY(380);
+        vBox.setStyle("-fx-font-size: 35");
+
+        rootNode.getChildren().add(vBox);
+
+        emojiPicker.setVisible(false);
+
+        btnEmoji.setOnAction(mouseEvent ->{
+            if (emojiPicker.isVisible()) {
+                emojiPicker.setVisible(false);
+            } else {
+                emojiPicker.setVisible(true);
+            }
+        });
+
+        emojiPicker.getEmojiListView().setOnMouseClicked(mouseEvent -> {
+            String selectedEmoji = emojiPicker.getEmojiListView().getSelectionModel().getSelectedItem();
+            if (selectedEmoji != null) {
+                txtMassage.setText(txtMassage.getText()+selectedEmoji);
+            }
+            emojiPicker.setVisible(false);
+        });
     }
 
     @FXML
@@ -174,7 +205,14 @@ public class ClientFormController implements Initializable {
         if (!msg.isEmpty()) {
             HBox hBox = new HBox();
             hBox.setAlignment(Pos.CENTER_RIGHT);
-            hBox.setPadding(new Insets(5,5,0,10));
+            hBox.setPadding(new Insets(5,5,5,10));
+
+
+            HBox hBoxName = new HBox();
+            hBoxName.setAlignment(Pos.CENTER_RIGHT);
+            Text textName = new Text("Me");
+            TextFlow textFlowName = new TextFlow(textName);
+            hBoxName.getChildren().add(textFlowName);
 
             Text text = new Text(msg);
             text.setStyle("-fx-font-size: 14");
@@ -185,17 +223,10 @@ public class ClientFormController implements Initializable {
 
             hBox.getChildren().add(textFlow);
 
-            HBox hBoxTime = new HBox();
-            hBoxTime.setAlignment(Pos.CENTER_RIGHT);
-            hBoxTime.setPadding(new Insets(0,5,5,10));
-            String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
-            Text txtTime = new Text(time);
-            txtTime.setStyle("-fx-font-size: 8");
-
-            hBoxTime.getChildren().add(txtTime);
-
-            vBox.getChildren().add(hBox);
-            vBox.getChildren().add(txtTime);
+            Platform.runLater(() ->{
+                vBox.getChildren().add(hBoxName);
+                vBox.getChildren().add(hBox);
+            });
 
             try {
                 dataOutputStream.writeUTF(userName + "-" + msg );
