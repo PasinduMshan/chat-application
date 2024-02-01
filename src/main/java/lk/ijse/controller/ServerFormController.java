@@ -51,6 +51,8 @@ public class ServerFormController implements Initializable {
 
     private List<ClientHandler> client = new ArrayList<>();
 
+    private List<String> clientName = new ArrayList<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         vBoxes = vBox;
@@ -101,7 +103,17 @@ public class ServerFormController implements Initializable {
     @FXML
     void btnLoginOnAction(ActionEvent event) throws IOException {
         String userName = txtUserName.getText();
+
         if (!userName.isEmpty() && userName.matches("[A-Za-z0-9]+")) {
+
+            for (int i = 0; i < clientName.size(); i++) {
+                if (userName.equals(clientName.get(i))){
+                    new Alert(Alert.AlertType.ERROR,"There is a user with the name you entered.\nPlease enter another name.").show();
+                    return;
+                }
+            }
+            clientName.add(userName);
+
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/view/Client_Form.fxml"));
             Parent rootNode = fxmlLoader.load();
 
@@ -122,4 +134,8 @@ public class ServerFormController implements Initializable {
         }
     }
 
+    @FXML
+    void txtUserLoginOnAction(ActionEvent event) throws IOException {
+        btnLoginOnAction(event);
+    }
 }

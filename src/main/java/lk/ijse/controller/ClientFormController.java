@@ -3,6 +3,8 @@ package lk.ijse.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,8 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class ClientFormController implements Initializable {
@@ -77,6 +77,13 @@ public class ClientFormController implements Initializable {
                 throw new RuntimeException(e);
             }
         }).start();
+
+        this.vBox.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                scrollPain.setVvalue((Double) t1);
+            }
+        });
     }
 
     public void receiveMessage(String message , VBox vBox) {
@@ -134,7 +141,7 @@ public class ClientFormController implements Initializable {
     void btnCameraOnAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png","*.jpg","*.gif","*.bmp","*jpeg")
+                new FileChooser.ExtensionFilter("Image Files", "*.png","*.jpg","*.gif","*.bmp","*.jpeg")
         );
         Stage stage = (Stage) rootNode.getScene().getWindow();
 
@@ -147,6 +154,12 @@ public class ClientFormController implements Initializable {
     }
 
     private void sendImageToClient(String sendImage) {
+        HBox hBoxName = new HBox();
+        hBoxName.setAlignment(Pos.CENTER_RIGHT);
+        Text textName = new Text("Me");
+        TextFlow textFlowName = new TextFlow(textName);
+        hBoxName.getChildren().add(textFlowName);
+
         Image image = new Image(sendImage);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(200);
@@ -157,6 +170,7 @@ public class ClientFormController implements Initializable {
         hBox.getChildren().add(imageView);
         hBox.setAlignment(Pos.CENTER_RIGHT);
 
+        vBox.getChildren().add(hBoxName);
         vBox.getChildren().add(hBox);
 
         try {
@@ -246,5 +260,10 @@ public class ClientFormController implements Initializable {
 
     public void shutdown() {
         ServerFormController.receiveMessage(userName + " left the chat.");
+    }
+
+    @FXML
+    void txtMessageSendOnAction(ActionEvent event) {
+        btnSendOnAction(event);
     }
 }

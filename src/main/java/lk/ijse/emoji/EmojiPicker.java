@@ -31,6 +31,7 @@ public class EmojiPicker extends VBox {
         emojiListView = new ListView<>();
         emojiListView.setItems(FXCollections.observableArrayList(emoji));
 
+
         HBox hBox = new HBox(emojiListView);
         hBox.setPadding(new Insets(10));
 
